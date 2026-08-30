@@ -22,14 +22,7 @@ namespace Sonarr.Http.Frontend.Mappers
 
         protected override string MapPath(string resourceUrl)
         {
-            var fileName = "favicon.ico";
-
-            if (BuildInfo.IsDebug)
-            {
-                fileName = "favicon-debug.ico";
-            }
-
-            var path = Path.Combine("Content", "Images", "Icons", fileName);
+            var path = Path.Combine("Content", "Images", "Icons", "favicon.ico");
 
             return Path.Combine(FolderPath, path);
         }
