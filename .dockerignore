@@ -1,0 +1,15 @@
+**/.git
+**/.github
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/node_modules
+_artifacts
+_output
+_temp
+_tests
+coverage
+Dockerfile*
+!Dockerfile
+README.md
