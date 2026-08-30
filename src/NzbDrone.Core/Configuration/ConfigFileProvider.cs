@@ -185,7 +185,7 @@ namespace NzbDrone.Core.Configuration
             }
         }
 
-        public int Port => _serverOptions.Port ?? GetValueInt("Port", 9292);
+        public int Port => 9292;
 
         public int SslPort => _serverOptions.SslPort ?? GetValueInt("SslPort", 9898);
 
@@ -335,6 +335,11 @@ namespace NzbDrone.Core.Configuration
             return Convert.ToInt32(GetValue(key, defaultValue, persist));
         }
 
+        public bool GetValueBoolean(string key, int defaultValue, bool persist = true)
+        {
+            return Convert.ToBoolean(GetValue(key, defaultValue, persist));
+        }
+
         public bool GetValueBoolean(string key, bool defaultValue, bool persist = true)
         {
             return Convert.ToBoolean(GetValue(key, defaultValue, persist));
@@ -361,13 +366,11 @@ namespace NzbDrone.Core.Configuration
                         return valueHolder.First().Value.Trim();
                     }
 
-                    // Save the value
                     if (persist)
                     {
                         SetValue(key, defaultValue);
                     }
 
-                    // return the default value
                     return defaultValue.ToString();
                 });
         }
@@ -381,19 +384,17 @@ namespace NzbDrone.Core.Configuration
             var parentContainer = config;
 
             var keyHolder = parentContainer.Descendants(key);
-
             if (keyHolder.Count() != 1)
             {
                 parentContainer.Add(new XElement(key, valueString));
             }
             else
             {
-                parentContainer.Descendants(key).Single().Value = valueString;
+                keyHolder.Single().Value = valueString;
             }
 
-            _cache.Set(key, valueString);
-
             SaveConfigFile(xDoc);
+            _cache.Clear();
         }
 
         public void SetValue(string key, Enum value)
@@ -405,7 +406,7 @@ namespace NzbDrone.Core.Configuration
         {
             if (!File.Exists(_configFile))
             {
-                SaveConfigDictionary(GetConfigDictionary());
+                SaveConfigFile(new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement(CONFIG_ELEMENT_NAME)));
             }
         }
 
@@ -416,7 +417,6 @@ namespace NzbDrone.Core.Configuration
                 return;
             }
 
-            // If SSL is enabled and a cert hash is still in the config file or cert path is empty disable SSL
             if (EnableSsl && (GetValue("SslCertHash", string.Empty, false).IsNotNullOrWhiteSpace() || SslCertPath.IsNullOrWhiteSpace()))
             {
                 SetValue("EnableSsl", false);
