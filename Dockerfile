@@ -29,9 +29,6 @@ RUN apt-get update \
         ca-certificates \
         curl \
         ffmpeg \
-        libicu74 \
-        libssl3t64 \
-        sqlite3 \
         tzdata \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd --gid 10001 reencodarr \
@@ -51,4 +48,4 @@ VOLUME ["/config"]
 
 USER reencodarr
 
-ENTRYPOINT ["./Sonarr", "-nobrowser", "-data=/config"]
+ENTRYPOINT ["./Sonarr", "-nobrowser", "-data=/config", "-exitimmediately"]
