@@ -7,7 +7,7 @@ COPY package.json yarn.lock .yarnrc ./
 RUN corepack enable \
     && yarn install --frozen-lockfile
 
-COPY frontend/ frontend/
+COPY . .
 RUN yarn build --env production
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0.400-noble AS backend-build
