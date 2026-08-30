@@ -43,7 +43,9 @@ COPY --from=backend-build --chown=reencodarr:reencodarr /source/_output/Sonarr.U
 COPY --from=frontend-build --chown=reencodarr:reencodarr /source/_output/UI/ ./UI/
 COPY --chown=reencodarr:reencodarr LICENSE.md ./
 
-EXPOSE 8989
+ENV Sonarr__Server__Port=9292
+
+EXPOSE 9292
 VOLUME ["/config"]
 
 USER reencodarr
